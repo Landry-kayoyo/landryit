@@ -186,7 +186,7 @@ INSERT INTO public.experiences (kind,period,title,organization,description,sort_
 VALUES 
 ('emploi','Actuellement','Membre de l''équipe technique','XSECURITY','Solutions informatiques pour PME : réseaux, sécurité, développement d''applications.',0,true),
 ('formation','2026','Licence en administration des systèmes et réseaux','Université Don Bosco de Lubumbashi','Mémoire : infrastructure de services haute disponibilité par cluster étendu.',1,true),
-('stage','Stage · 2 mois','Stagiaire académique','INPP — Institut National de Préparation Professionnelle','Support informatique, maintenance matérielle et logicielle.',2,true),
+('stage','Stage · 2 mois','Stagiaire académique','INPP — Institut National de Préparation Professionnelle','Support informatique, maintenance matérielle et logicielle.',2,true);
 -- ==============================================================================
 -- 5. MESSAGES DE CONTACT
 -- ==============================================================================

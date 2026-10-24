@@ -2,7 +2,25 @@ import postgres from "postgres";
 import fs from "fs";
 import path from "path";
 
-const connectionString = "postgresql://postgres.gjkgzlsztuuamdvbmapr:mbfkkOqSQJmbnCR7@aws-0-eu-west-1.pooler.supabase.com:5432/postgres";
+// Charger manuellement .env si present
+try {
+  const raw = fs.readFileSync(".env", "utf-8");
+  for (const line of raw.split("\n")) {
+    const match = line.match(/^([^#=]+)=(.*)$/);
+    if (match) {
+      const key = match[1].trim();
+      const val = match[2].trim().replace(/^["']|["']$/g, "");
+      if (!process.env[key]) process.env[key] = val;
+    }
+  }
+} catch { /* pas de .env */ }
+
+const connectionString = process.env.LOVABLE_DB_MIGRATION_URL || "postgresql://postgres.gjkgzlsztuuamdvbmapr:mbfkkOqSQJmbnCR7@aws-0-eu-west-1.pooler.supabase.com:5432/postgres";
+
+if (!connectionString) {
+  console.error("❌ LOVABLE_DB_MIGRATION_URL manquante");
+  process.exit(1);
+}
 
 const sql = postgres(connectionString, { ssl: "require", max: 1 });
 
