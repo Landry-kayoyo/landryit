@@ -1,4 +1,4 @@
-﻿/**
+/**
  * scripts/setup-admin.mjs
  * ─────────────────────────────────────────────────────────────
  * Cree le compte administrateur dans Supabase Auth
@@ -45,9 +45,10 @@ async function run() {
   console.log("👑 Setup compte administrateur...");
   console.log(`   Email : ${ADMIN_EMAIL}`);
 
-  // 1. Verifier si l'utilisateur existe deja
   const { data: existing } = await supabase.auth.admin.listUsers();
-  const found = existing?.users?.find((u) => u.email === ADMIN_EMAIL);
+  const found = existing?.users?.find(
+    (u) => u.email?.toLowerCase() === ADMIN_EMAIL.toLowerCase()
+  );
 
   let userId;
 
