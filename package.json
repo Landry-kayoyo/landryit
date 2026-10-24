@@ -14,7 +14,8 @@
     "test:watch": "vitest",
     "db:migrate": "node run-migrations.mjs",
     "db:admin": "node scripts/setup-admin.mjs",
-    "setup": "node run-migrations.mjs && node scripts/setup-admin.mjs"
+    "db:projects": "node scripts/seed-projects-content.mjs",
+    "setup": "node run-migrations.mjs && node scripts/setup-admin.mjs && node scripts/seed-projects-content.mjs"
   },
   "overrides": {
     "rolldown": "1.2.1"
