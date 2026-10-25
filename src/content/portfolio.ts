@@ -42,9 +42,19 @@ export const profile = {
 export const nav = [
   { to: "/a-propos", label: "À propos" },
   { href: "#competences", label: "Compétences" },
-  { href: "#projets", label: "Projets" },
+  { to: "/projets", label: "Projets" },
   { href: "#parcours", label: "Parcours" },
-  { href: "#contact", label: "Contact" },
+  { to: "/contact", label: "Contact" },
+];
+
+// Institutions et marques partenaires / environnements d'intervention
+export const brands = [
+  { name: "XSECURITY", role: "Cybersécurité & Réseaux", city: "Lubumbashi" },
+  { name: "INPP", role: "Infrastructures critiques", city: "Direction provinciale" },
+  { name: "CNSS", role: "Systèmes de production", city: "Lubumbashi" },
+  { name: "Université Don Bosco", role: "Sciences Informatiques", city: "Lubumbashi" },
+  { name: "PayLix", role: "Plateforme Fintech & Web", city: "RDC" },
+  { name: "Cisco Networking", role: "Validation académique", city: "Academy" },
 ];
 
 // Résumé court affiché sur la page d'accueil (5 à 8 lignes).
@@ -54,41 +64,113 @@ export const about = [
   "Mon objectif : livrer des services fiables, sécurisés et simples à maintenir.",
 ];
 
-// Contenu de la page dédiée /a-propos. Le texte de « story » est une
-// proposition crédible : remplacez-le par votre vraie histoire quand vous voulez.
+// Phrase d'accroche / conviction éditoriale affichée en haut de la page d'accueil
+export const conviction = {
+  text: "Une infrastructure solide ne se remarque pas : elle fonctionne en continu et en silence.",
+  highlight: "Le code moderne ne vaut que s'il est fiable, sécurisé et immédiatement utile.",
+};
+
+// Contenu de la page dédiée /a-propos.
 export const aboutPage = {
   back: "Retour à l'accueil",
-  readStory: "Lire mon histoire",
-  eyebrow: "À propos de moi",
-  title: "Derrière les réseaux et le code, il y a une histoire.",
-  intro: "Administrateur systèmes & réseaux et développeur web à Lubumbashi — et avant tout, quelqu'un qui aime comprendre comment les choses fonctionnent.",
-  storyTitle: "Mon histoire",
+  readStory: "Lire mon histoire complète",
+  eyebrow: "Mon histoire · Ma vision",
+  title: "Derrière les réseaux et le code, une exigence de fiabilité.",
+  intro:
+    "Administrateur systèmes & réseaux et développeur web à Lubumbashi — j'interviens de bout en bout pour concevoir des architectures résilientes et des outils numériques immédiatement utiles.",
+  storyTitle: "Mon parcours",
+  storySubtitle: "Des bancs de l'Université Don Bosco aux interventions critiques chez XSECURITY, l'INPP et la CNSS.",
+  chapters: [
+    {
+      number: "01",
+      tag: "Vocation & Rigueur académique",
+      title: "Les fondations à l'Université Don Bosco",
+      text: "Diplômé en Administration des Systèmes et Réseaux à l'Université Don Bosco de Lubumbashi, j'ai forgé mes bases autour de principes stricts : la haute disponibilité par cluster, la redondance des liaisons et la sécurité dès la conception. Là où beaucoup découvrent l'informatique par la surface, j'ai appris à maîtriser les couches profondes — de la trame Ethernet au routage dynamique.",
+    },
+    {
+      number: "02",
+      tag: "Épreuve du terrain critique",
+      title: "L'apprentissage opérationnel : INPP & CNSS",
+      text: "Mes immersions au sein de l'INPP (Institut National de Préparation Professionnelle) et de la CNSS (Caisse Nationale de Sécurité Sociale) m'ont confronté aux réalités du terrain d'entreprise : maintenir des services vitaux 24/7, assister les utilisateurs avec bienveillance sans jargon, et neutraliser les pannes avant qu'elles n'impactent l'activité économique.",
+    },
+    {
+      number: "03",
+      tag: "Pratique en production",
+      title: "XSECURITY & Le développement web utile",
+      text: "Aujourd'hui membre de l'équipe technique de XSECURITY à Lubumbashi, j'accompagne les entreprises locales dans la sécurisation de leurs réseaux, l'administration de leurs serveurs et la création d'applications web modernes (comme PayLix). Cette double maîtrise — matériel/réseau et code applicatif — me permet de livrer des solutions cohérentes sans intermédiaire ni rupture de responsabilité.",
+    },
+    {
+      number: "04",
+      tag: "Engagement & Vision",
+      title: "Construire des outils qui durent",
+      text: "En République Démocratique du Congo, les défis d'infrastructure exigent du pragmatisme : des réseaux tolérants aux pannes, des données protégées et des applications rapides même avec une bande passante contrainte. Ma mission est de transformer la complexité technologique en sérénité opérationnelle pour chaque organisation qui me fait confiance.",
+    },
+  ],
   story: [
     "Administrateur systèmes & réseaux et développeur web à Lubumbashi, j'interviens au cœur des infrastructures numériques pour garantir leur continuité, leur sécurité et leur efficacité.",
     "Diplômé en administration des systèmes et réseaux de l'Université Don Bosco de Lubumbashi, j'ai forgé mes compétences autour des architectures résilientes et de la haute disponibilité par cluster. Mes expériences pratiques au sein de l'INPP et de la CNSS m'ont confronté aux réalités du terrain : maintenir des services critiques, assister les utilisateurs et anticiper les pannes avant qu'elles n'impactent l'activité.",
     "Aujourd'hui membre de l'équipe technique de XSECURITY, j'accompagne les entreprises dans l'installation de réseaux fiables, la sécurisation de leurs données et la création d'applications web modernes (comme PayLix). Ma double maîtrise des réseaux et du code me permet de livrer des solutions cohérentes de bout en bout, sans intermédiaire.",
     "Mon engagement est simple : transformer la complexité technique en outils stables, clairs et immédiatement utiles à votre organisation.",
   ],
-  valuesTitle: "Ce qui me motive",
-  valuesIntro: "Quatre principes guident chacune de mes missions, du câblage d'un bureau au déploiement d'une plateforme web.",
+  valuesTitle: "Ce qui guide chacune de mes missions",
+  valuesIntro:
+    "Quatre principes non négociables, du sertissage d'un câble RJ45 jusqu'au déploiement d'une application web en ligne.",
   values: [
-    { title: "Fiabilité", text: "Un service qui tombe, c'est une activité qui s'arrête. Je conçois des systèmes pensés pour durer et rester disponibles." },
-    { title: "Sécurité", text: "Les données de mes clients sont précieuses. J'intègre la protection dès la conception, jamais après coup." },
-    { title: "Clarté", text: "Un bon travail est un travail que l'on comprend : je documente et j'explique mes choix en langage simple." },
-    { title: "Progrès continu", text: "La technologie évolue vite. Formations, veille et projets personnels font partie de ma routine." },
+    {
+      title: "Fiabilité absolue",
+      text: "Un système qui tombe, c'est une activité qui s'arrête et des pertes financières. Je conçois des architectures conçues pour durer et tolérer les pannes sans interruption de service.",
+    },
+    {
+      title: "Sécurité native",
+      text: "Les données de l'entreprise sont son bien le plus précieux. J'intègre le contrôle d'accès strict, la redondance et les sauvegardes dès le premier jour, jamais après coup.",
+    },
+    {
+      title: "Clarté & Pédagogie",
+      text: "Un bon travail technique est un travail documenté et compréhensible. J'explique chaque choix en langage simple pour que le client reste maître de ses outils.",
+    },
+    {
+      title: "Exigence continue",
+      text: "Les technologies et menaces évoluent rapidement. Veille quotidienne, certifications Cisco et perfectionnement constant sur le web font partie de ma routine.",
+    },
   ],
-  milestonesTitle: "Les moments clés de mon parcours",
-  ctaTitle: "Travaillons ensemble",
-  ctaText: "Un réseau à installer, un système à sécuriser, une application à développer ? Racontez-moi votre projet — je vous réponds rapidement.",
-  cta: "Me contacter",
+  milestonesTitle: "Les étapes clés de mon parcours",
+  ctaTitle: "Écrivons ensemble le prochain chapitre",
+  ctaText:
+    "Un réseau à déployer, un serveur à sécuriser ou une application web à développer ? Discutons de vos enjeux techniques et trouvons la solution la plus adaptée.",
+  cta: "Me contacter directement",
 };
 
 export const skills = [
-  { category: "Systèmes", icon: "server", items: ["Windows", "Ubuntu / Linux", "Virtualisation", "Clusters haute disponibilité"] },
-  { category: "Réseaux", icon: "network", items: ["Réseaux LAN", "Adressage IP", "Cisco Packet Tracer", "Dépannage réseau"] },
-  { category: "Sécurité", icon: "shield", items: ["Sécurisation des systèmes", "Gestion des accès", "Sauvegardes", "Continuité de service"] },
-  { category: "Développement web", icon: "code", items: ["HTML / CSS", "JavaScript", "Applications web", "Bases de données"] },
-  { category: "Support & outils", icon: "wrench", items: ["Support informatique", "Matériel informatique", "Outils open source", "Git"] },
+  {
+    category: "Systèmes",
+    icon: "server",
+    description: "Administration de serveurs Windows & Linux, virtualisation et haute disponibilité par clusters.",
+    items: ["Windows Server", "Ubuntu / Linux", "Virtualisation", "Clusters haute disponibilité"],
+  },
+  {
+    category: "Réseaux",
+    icon: "network",
+    description: "Conception d'infrastructures LAN résilientes, adressage IP, routage et diagnostic rapide.",
+    items: ["Réseaux LAN", "Adressage IP", "Cisco Packet Tracer", "Dépannage réseau"],
+  },
+  {
+    category: "Sécurité",
+    icon: "shield",
+    description: "Protection des données d'entreprise, politiques d'accès, sauvegardes et continuité de service.",
+    items: ["Sécurisation des systèmes", "Gestion des accès", "Sauvegardes", "Continuité de service"],
+  },
+  {
+    category: "Développement web",
+    icon: "code",
+    description: "Création d'applications web robustes, interfaces ergonomiques et modélisation de bases de données.",
+    items: ["HTML / CSS", "JavaScript", "Applications web", "Bases de données"],
+  },
+  {
+    category: "Support & outils",
+    icon: "wrench",
+    description: "Assistance technique aux utilisateurs, maintenance du matériel informatique et collaboration Git.",
+    items: ["Support informatique", "Matériel informatique", "Outils open source", "Git"],
+  },
 ];
 
 export const projectPage = {

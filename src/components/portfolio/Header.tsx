@@ -17,19 +17,65 @@ export function Header() {
           <img src={logo.url} alt="" width={880} height={880} className="h-9 w-9 shrink-0 rounded-md sm:h-10 sm:w-10" />
           <span className="font-sans text-lg font-bold uppercase tracking-wide sm:text-xl"><span className="text-primary">Landry</span> <span className="text-foreground">Net</span></span>
         </Link>
-        <nav aria-label="Navigation principale" className="hidden items-center gap-8 md:flex">
-          {nav.slice(0, 4).map((n) => "to" in n
-            ? <Link key={n.label} to={n.to} className={desktopLink}>{n.label}</Link>
-            : <Link key={n.label} to="/" hash={n.href.slice(1)} className={desktopLink}>{n.label}</Link>)}
+        <nav aria-label="Navigation principale" className="hidden items-center gap-7 md:flex">
+          {nav.map((n) =>
+            "to" in n ? (
+              <Link key={n.label} to={n.to} className={desktopLink}>
+                {n.label}
+              </Link>
+            ) : (
+              <Link key={n.label} to="/" hash={n.href.slice(1)} className={desktopLink}>
+                {n.label}
+              </Link>
+            ),
+          )}
         </nav>
         <div className="flex items-center gap-2">
-          <span className="hidden sm:inline-flex"><Button asChild className="rounded-full bg-gradient-primary px-5"><Link to="/" hash="contact">Me contacter</Link></Button></span>
-          <Button variant="ghost" size="icon" className="md:hidden" aria-label={open ? "Fermer le menu" : "Ouvrir le menu"} aria-expanded={open} onClick={() => setOpen(!open)}>{open ? <X /> : <Menu />}</Button>
+          <span className="hidden sm:inline-flex">
+            <Button asChild className="rounded-full bg-gradient-primary px-5 shadow-sm">
+              <Link to="/contact">Me contacter</Link>
+            </Button>
+          </span>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="md:hidden"
+            aria-label={open ? "Fermer le menu" : "Ouvrir le menu"}
+            aria-expanded={open}
+            onClick={() => setOpen(!open)}
+          >
+            {open ? <X /> : <Menu />}
+          </Button>
         </div>
       </div>
-      {open && <nav aria-label="Navigation mobile" className="border-t border-border bg-background md:hidden"><div className="mx-auto flex max-w-6xl flex-col px-5 py-3">{nav.map((n) => "to" in n
-        ? <Link key={n.label} to={n.to} onClick={() => setOpen(false)} className={mobileLink}>{n.label}</Link>
-        : <Link key={n.label} to="/" hash={n.href.slice(1)} onClick={() => setOpen(false)} className={mobileLink}>{n.label}</Link>)}</div></nav>}
+      {open && (
+        <nav aria-label="Navigation mobile" className="border-t border-border bg-background md:hidden">
+          <div className="mx-auto flex max-w-6xl flex-col px-5 py-3">
+            {nav.map((n) =>
+              "to" in n ? (
+                <Link
+                  key={n.label}
+                  to={n.to}
+                  onClick={() => setOpen(false)}
+                  className={mobileLink}
+                >
+                  {n.label}
+                </Link>
+              ) : (
+                <Link
+                  key={n.label}
+                  to="/"
+                  hash={n.href.slice(1)}
+                  onClick={() => setOpen(false)}
+                  className={mobileLink}
+                >
+                  {n.label}
+                </Link>
+              ),
+            )}
+          </div>
+        </nav>
+      )}
     </header>
   );
 }

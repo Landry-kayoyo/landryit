@@ -1,24 +1,26 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowLeft } from "lucide-react";
+import { useState } from "react";
+import { ArrowLeft, Filter, Sparkles } from "lucide-react";
 import { Header } from "@/components/portfolio/Header";
 import { Footer } from "@/components/portfolio/Footer";
-import { WhatsAppFloat } from "@/components/portfolio/WhatsAppFloat";
 import { ProjectCard } from "@/components/portfolio/ProjectCard";
-import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import { ContentError, ContentLoading } from "@/components/portfolio/ContentState";
 import { projectsQuery } from "@/lib/content.queries";
-import { profile, shareImage } from "@/content/portfolio";
+import { shareImage } from "@/content/portfolio";
 
 const TITLE = "Tous les projets — Landry Kayoyo";
-const DESC = "Toutes les études de cas de Landry Kayoyo : haute disponibilité, réseaux, sécurité et applications web.";
+const DESC = "Toutes les réalisations et études de cas de Landry Kayoyo : haute disponibilité, réseaux résilients, sécurité et plateformes web modernes.";
 
 export const Route = createFileRoute("/projets/")({
   head: () => ({
     meta: [
-      { title: TITLE }, { name: "description", content: DESC },
-      { property: "og:title", content: TITLE }, { property: "og:description", content: DESC },
-      { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" },
+      { title: TITLE },
+      { name: "description", content: DESC },
+      { property: "og:title", content: TITLE },
+      { property: "og:description", content: DESC },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { property: "og:image", content: shareImage.url },
       { property: "og:image:width", content: String(shareImage.width) },
       { property: "og:image:height", content: String(shareImage.height) },
@@ -33,27 +35,107 @@ export const Route = createFileRoute("/projets/")({
 });
 
 const container = "mx-auto w-full max-w-6xl px-5 md:px-8";
+const focus = "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background";
 
 function ProjectsPage() {
   const { data: projects, isPending, isError, refetch } = useQuery(projectsQuery);
+  const [selectedTag, setSelectedTag] = useState<string>("Tous");
+
+  const allProjects = projects ?? [];
+  const tags = ["Tous", ...Array.from(new Set(allProjects.map((p) => p.tag).filter(Boolean)))];
+
+  const filteredProjects =
+    selectedTag === "Tous"
+      ? allProjects
+      : allProjects.filter((p) => p.tag === selectedTag);
+
   return (
     <div className="bg-background text-foreground">
       <Header />
-      <main className="page-enter pt-24 md:pt-28">
-        <section className={`${container} pb-10`}>
-          <Button asChild variant="link" className="mb-6 px-0"><Link to="/"><ArrowLeft />Accueil</Link></Button>
-          <p className="mb-3 text-sm font-semibold uppercase tracking-wide text-primary">Portfolio · {projects ? `${projects.length} projets` : "projets"}</p>
-          <h1 className="max-w-3xl text-4xl font-semibold leading-tight md:text-5xl">Tous les projets</h1>
-          <p className="mt-5 max-w-2xl text-lg leading-relaxed text-muted-foreground">Des problèmes réels, des solutions concrètes : réseaux, infrastructures, sécurité et développement web.</p>
+      <main className="page-enter pt-24 md:pt-32">
+        {/* En-tête héro des projets */}
+        <section className={`${container} pb-12`}>
+          <Link
+            to="/"
+            className={`mb-6 inline-flex items-center gap-2 rounded-full border border-border bg-card px-4 py-1.5 text-xs font-semibold text-muted-foreground transition-colors hover:text-foreground hover:border-primary/40 ${focus}`}
+          >
+            <ArrowLeft size={14} /> Retour à l'accueil
+          </Link>
+
+          <div className="mb-4 inline-flex items-center gap-3 text-xs md:text-sm font-semibold uppercase tracking-[0.22em] text-primary">
+            <span className="h-[1.5px] w-7 rounded-full bg-primary/80 inline-block" />
+            <span>Réalisations & Études de cas</span>
+          </div>
+
+          <h1 className="max-w-3xl font-serif text-4xl sm:text-5xl md:text-6xl font-normal leading-tight tracking-tight text-foreground">
+            Tous les projets, <span className="italic font-serif text-primary">conçus pour durer</span>.
+          </h1>
+
+          <p className="mt-5 max-w-2xl text-base sm:text-lg leading-relaxed text-muted-foreground">
+            Infrastructures haute disponibilité, réseaux locaux d'entreprises, déploiements sécurisés et applications web modernes (comme PayLix).
+          </p>
+
+          {/* Filtres par catégories */}
+          {tags.length > 1 && (
+            <div className="mt-8 flex flex-wrap items-center gap-2 border-t border-border/60 pt-6">
+              <span className="mr-2 inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                <Filter size={13} /> Filtrer :
+              </span>
+              {tags.map((tag) => {
+                const isActive = selectedTag === tag;
+                return (
+                  <button
+                    key={tag}
+                    type="button"
+                    onClick={() => setSelectedTag(tag)}
+                    className={`rounded-full px-4 py-1.5 text-xs font-semibold transition-all duration-200 ${focus} ${
+                      isActive
+                        ? "bg-gradient-primary text-primary-foreground shadow-sm"
+                        : "border border-border/80 bg-card text-muted-foreground hover:border-primary/30 hover:text-foreground"
+                    }`}
+                  >
+                    {tag}
+                  </button>
+                );
+              })}
+            </div>
+          )}
         </section>
-        {isPending ? <div className={`${container} pb-20 md:pb-28`}><ContentLoading rows={2} className="h-72" /></div>
-          : isError || !projects ? <div className={`${container} pb-20 md:pb-28`}><ContentError label="les projets" onRetry={() => refetch()} /></div>
-          : <section className={`${container} grid gap-6 pb-20 md:grid-cols-2 md:pb-28`}>
-          {projects.map((p, i) => <ProjectCard key={p.slug} p={p} index={i} />)}
-        </section>}
+
+        {/* Grille de projets */}
+        {isPending ? (
+          <div className={`${container} pb-24 md:pb-32`}>
+            <ContentLoading rows={2} className="h-80" />
+          </div>
+        ) : isError ? (
+          <div className={`${container} pb-24 md:pb-32`}>
+            <ContentError label="les projets" onRetry={() => refetch()} />
+          </div>
+        ) : filteredProjects.length === 0 ? (
+          <div className={`${container} pb-24 md:pb-32`}>
+            <div className="rounded-[28px] border border-border/80 bg-card p-12 text-center">
+              <p className="font-serif text-xl font-medium text-foreground">
+                Aucun projet trouvé dans cette catégorie
+              </p>
+              <button
+                type="button"
+                onClick={() => setSelectedTag("Tous")}
+                className="mt-4 inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-2 text-xs font-semibold text-primary transition hover:bg-primary/20"
+              >
+                Réinitialiser les filtres
+              </button>
+            </div>
+          </div>
+        ) : (
+          <section className={`${container} grid gap-7 lg:gap-8 pb-24 md:grid-cols-2 md:pb-32`}>
+            {filteredProjects.map((p, i) => (
+              <ProjectCard key={p.slug} p={p} index={i} />
+            ))}
+          </section>
+        )}
       </main>
+
       <Footer />
-      <WhatsAppFloat />
     </div>
   );
 }

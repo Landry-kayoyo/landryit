@@ -74,11 +74,12 @@ export async function uploadToCloudinary(
   });
 }
 
-/** Valide le type MIME d'une image avant l'upload. */
+/** Valide le type MIME d'une image ou d'un logo SVG avant l'upload. */
 export function validateImage(file: File, maxMb = 5): string | null {
-  const ALLOWED = ["image/png", "image/jpeg", "image/webp", "image/gif"];
-  if (!ALLOWED.includes(file.type)) return "Format non autorisé : PNG, JPG, WEBP ou GIF.";
-  if (file.size > maxMb * 1024 * 1024) return `Image trop lourde : ${maxMb} Mo maximum.`;
+  const ALLOWED = ["image/png", "image/jpeg", "image/webp", "image/gif", "image/svg+xml"];
+  const isSvg = file.type === "image/svg+xml" || file.name.toLowerCase().endsWith(".svg");
+  if (!ALLOWED.includes(file.type) && !isSvg) return "Format non autorisé : SVG, PNG, JPG, WEBP ou GIF.";
+  if (file.size > maxMb * 1024 * 1024) return `Fichier trop lourd : ${maxMb} Mo maximum.`;
   return null;
 }
 

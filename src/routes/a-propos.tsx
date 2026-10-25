@@ -1,22 +1,23 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
-  ArrowLeft, ArrowRight, Award, Briefcase, FileText, GraduationCap, Lightbulb, Lock, ShieldCheck,
+  ArrowLeft, ArrowRight, Award, Briefcase, CheckCircle2, FileText, GraduationCap,
+  Lightbulb, Lock, ShieldCheck, Sparkles,
 } from "lucide-react";
 import { Header } from "@/components/portfolio/Header";
 import { Footer } from "@/components/portfolio/Footer";
 import { Reveal, SectionHeading } from "@/components/portfolio/Reveal";
 import { Button } from "@/components/ui/button";
-import { WhatsAppFloat } from "@/components/portfolio/WhatsAppFloat";
 import { useQuery } from "@tanstack/react-query";
 import { ContentError, ContentLoading } from "@/components/portfolio/ContentState";
 import { experiencesQuery } from "@/lib/content.queries";
-import { aboutPage, profile, shareImage } from "@/content/portfolio";
+import { aboutPage, conviction, shareImage } from "@/content/portfolio";
 import { AnimatedStats } from "@/components/portfolio/AnimatedStats";
+import { BrandsMarquee } from "@/components/portfolio/BrandsMarquee";
 
 const photo = { url: "/landry-a-propos.jpg" };
 
-const TITLE = "À propos — Landry Kayoyo";
-const DESC = "Landry Kayoyo, administrateur systèmes et réseaux et développeur web à Lubumbashi : études à l'Université Don Bosco, stages à l'INPP et à la CNSS, PayLix et accompagnement des petites entreprises avec XSECURITY.";
+const TITLE = "À propos — Landry Kayoyo | Administrateur réseaux & Développeur web";
+const DESC = "Parcours, vision et méthodes de Landry Kayoyo, administrateur systèmes et réseaux et développeur web à Lubumbashi : Université Don Bosco, INPP, CNSS et XSECURITY.";
 
 export const Route = createFileRoute("/a-propos")({
   head: () => ({
@@ -41,125 +42,197 @@ export const Route = createFileRoute("/a-propos")({
 });
 
 const focus = "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background";
-const btnPrimary = `inline-flex items-center justify-center gap-2 rounded-full bg-gradient-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-glow transition hover:brightness-110 ${focus}`;
+const btnPrimary = `inline-flex items-center justify-center gap-2 rounded-full bg-gradient-primary px-6 py-3.5 text-sm font-semibold text-primary-foreground shadow-glow transition duration-300 hover:brightness-110 ${focus}`;
 const container = "mx-auto w-full max-w-6xl px-5 md:px-8";
 const valueIcons = [ShieldCheck, Lock, FileText, Lightbulb] as const;
 
-
 function APropos() {
   const timelineQ = useQuery(experiencesQuery);
+
   return (
     <div id="top" className="bg-background text-foreground">
-      <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-lg focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-foreground">Aller au contenu</a>
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-lg focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-foreground"
+      >
+        Aller au contenu
+      </a>
       <Header />
-      <main id="main" className="page-enter">
-        {/* Titre + photo */}
+      <main id="main">
+        {/* Héro de présentation — padding généreux évitant toute superposition avec le header fixe */}
         <section className="relative overflow-hidden bg-hero text-ink-foreground">
           <div className="bg-grid pointer-events-none absolute inset-0" aria-hidden />
-          <div className={`${container} relative grid items-center gap-12 pb-16 pt-28 md:grid-cols-[1.15fr_0.85fr] md:pb-24 md:pt-36`}>
+          <div className={`${container} relative grid items-center gap-14 pb-20 pt-36 sm:pt-40 md:grid-cols-[1.15fr_0.85fr] md:pb-28 md:pt-48`}>
             <div>
-              <Link to="/" className={`mb-8 inline-flex items-center gap-2 text-sm font-medium text-ink-foreground/70 transition hover:text-ink-foreground ${focus}`}>
-                <ArrowLeft size={16} /> {aboutPage.back}
+              <Link
+                to="/"
+                className={`mb-6 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-4 py-1.5 text-xs font-semibold text-white/90 backdrop-blur-sm transition duration-300 hover:bg-white/15 hover:text-white ${focus}`}
+              >
+                <ArrowLeft size={14} /> {aboutPage.back}
               </Link>
-              <p className="mb-3 text-sm font-semibold uppercase tracking-[0.18em] text-primary-glow">{aboutPage.eyebrow}</p>
-              <h1 className="max-w-xl text-4xl font-semibold leading-[1.05] sm:text-5xl md:text-6xl">{aboutPage.title}</h1>
-              <p className="mt-6 max-w-xl text-lg leading-relaxed text-ink-foreground/70">{aboutPage.intro}</p>
-            </div>
-            <Reveal className="relative mx-auto w-full max-w-[320px]">
-              <div className="absolute -inset-1 rounded-[2.2rem] bg-gradient-primary opacity-70 blur-2xl" aria-hidden />
-              <div className="relative rounded-[2rem] bg-gradient-primary p-[3px]">
-                <img src={photo.url} alt="Landry Kayoyo en costume, assis à son poste de travail" width={1080} height={1080} fetchPriority="high" className="aspect-[4/5] w-full rounded-[1.85rem] object-cover object-[55%_25%]" />
+
+              <div className="mb-4 inline-flex items-center gap-3 text-xs md:text-sm font-semibold uppercase tracking-[0.22em] text-primary-glow">
+                <span className="h-[1.5px] w-7 rounded-full bg-primary-glow/70 inline-block" />
+                <span>{aboutPage.eyebrow}</span>
               </div>
+
+              <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl font-normal leading-[1.06] tracking-tight">
+                Derrière les réseaux et le code, <span className="italic font-serif text-primary-glow">une exigence de fiabilité</span>.
+              </h1>
+
+              <p className="mt-6 max-w-xl text-base sm:text-lg leading-relaxed text-ink-foreground/80">
+                {aboutPage.intro}
+              </p>
+
+              {/* CTAs réécrits avec contraste maximal */}
+              <div className="mt-8 flex flex-wrap items-center gap-3">
+                <Link to="/contact" className={btnPrimary}>
+                  Échanger sur votre projet <ArrowRight size={16} />
+                </Link>
+                <a
+                  href="#recit"
+                  className={`inline-flex items-center justify-center gap-2 rounded-full border border-white/25 bg-white/10 px-6 py-3.5 text-sm font-semibold text-white backdrop-blur-md transition duration-300 hover:bg-white/20 hover:border-white/40 ${focus}`}
+                >
+                  Découvrir mon récit ↓
+                </a>
+              </div>
+            </div>
+
+            {/* Photo immédiatement visible (sans délai Reveal) */}
+            <div className="relative mx-auto w-full max-w-[340px]">
+              <div className="absolute -inset-1 rounded-[2.2rem] bg-gradient-primary opacity-60 blur-2xl" aria-hidden />
+              <div className="relative rounded-[2rem] bg-gradient-primary p-[3px] shadow-2xl">
+                <img
+                  src={photo.url}
+                  alt="Landry Kayoyo en costume, assis à son poste de travail"
+                  width={1080}
+                  height={1080}
+                  loading="eager"
+                  fetchPriority="high"
+                  className="aspect-[4/5] w-full rounded-[1.85rem] object-cover object-[55%_25%]"
+                />
+              </div>
+              <div className="absolute -left-6 bottom-10 rounded-2xl border border-border/80 bg-card/95 px-4 py-3 text-card-foreground shadow-card backdrop-blur-md">
+                <p className="flex items-center gap-2 text-sm font-semibold">
+                  <Award size={16} className="text-primary" /> Cisco Networking
+                </p>
+                <p className="text-xs text-muted-foreground">Formation validée</p>
+              </div>
+              <div className="absolute -right-4 top-8 rounded-2xl border border-border/80 bg-card/95 px-4 py-3 text-card-foreground shadow-card backdrop-blur-md">
+                <p className="flex items-center gap-2 text-sm font-semibold">
+                  <GraduationCap size={16} className="text-primary" /> Don Bosco 2026
+                </p>
+                <p className="text-xs text-muted-foreground">Systèmes & réseaux</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Bandeau de conviction architectural */}
+        <section className="relative overflow-hidden border-b border-border bg-card py-12 md:py-16">
+          <div className={`${container} text-center`}>
+            <Reveal className="mx-auto max-w-3xl">
+              <blockquote className="font-serif text-xl sm:text-2xl md:text-3xl font-normal leading-relaxed text-foreground">
+                « {conviction.text}{" "}
+                <span className="italic font-serif text-primary font-medium">
+                  {conviction.highlight}
+                </span> »
+              </blockquote>
             </Reveal>
           </div>
         </section>
 
-        {/* Mon histoire */}
-        <section className="py-16 md:py-24">
-          <div className={`${container} max-w-4xl`}>
+        {/* Le Récit en 4 chapitres éditoriaux */}
+        <section id="recit" className="py-20 md:py-28">
+          <div className={`${container} max-w-5xl`}>
             <Reveal>
-              <SectionHeading eyebrow="Vision & Expérience" title={aboutPage.storyTitle} />
+              <SectionHeading
+                number="01"
+                eyebrow="Récit & Trajectoire"
+                title="Quatre étapes,"
+                accent="une même obsession de robustesse."
+                description={aboutPage.storySubtitle}
+              />
             </Reveal>
 
-            <div className="space-y-6 mt-8">
-              {/* Chapeau d'accroche */}
-              {aboutPage.story[0] && (
-                <Reveal>
-                  <div className="rounded-2xl sm:rounded-3xl border border-primary/25 bg-primary/5 p-6 sm:p-7 shadow-xs">
-                    <p className="text-lg sm:text-xl font-medium text-foreground leading-relaxed">
-                      {aboutPage.story[0]}
+            <div className="mt-12 grid gap-6 md:grid-cols-2">
+              {aboutPage.chapters?.map((ch) => (
+                <Reveal key={ch.number} className="h-full">
+                  <article className="pillar-card flex h-full flex-col justify-between rounded-[28px] border border-border/70 bg-card p-7 sm:p-8 shadow-sm">
+                    <div>
+                      <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-wider text-primary">
+                        <span className="flex items-center gap-2">
+                          <span className="font-serif text-sm font-bold">Chapitre {ch.number}</span>
+                          <span className="h-1 w-1 rounded-full bg-primary/40" />
+                          <span className="text-muted-foreground">{ch.tag}</span>
+                        </span>
+                      </div>
+                      <h3 className="mt-4 font-serif text-xl sm:text-2xl font-medium tracking-tight text-foreground">
+                        {ch.title}
+                      </h3>
+                      <p className="mt-3 text-sm sm:text-base leading-relaxed text-muted-foreground">
+                        {ch.text}
+                      </p>
+                    </div>
+                  </article>
+                </Reveal>
+              ))}
+            </div>
+
+            {/* Encadré d'impact Bento */}
+            <Reveal className="mt-12">
+              <div className="rounded-[32px] border border-border/80 bg-secondary/30 p-7 sm:p-9 backdrop-blur-sm shadow-sm">
+                <div className="mb-6 flex flex-wrap items-center justify-between gap-3 border-b border-border/70 pb-4">
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-wider text-primary">
+                      Repères d'impact
                     </p>
+                    <h3 className="font-serif text-2xl font-medium text-foreground">
+                      Compteurs & qualifications vérifiées
+                    </h3>
                   </div>
-                </Reveal>
-              )}
-
-              {/* Corps de l'histoire en deux piliers bien aérés */}
-              <div className="grid gap-5 sm:grid-cols-2">
-                {aboutPage.story[1] && (
-                  <Reveal className="h-full">
-                    <div className="h-full rounded-2xl border border-border/80 bg-card p-6 shadow-sm flex flex-col justify-between">
-                      <div>
-                        <span className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-primary mb-3">
-                          <GraduationCap size={15} /> Formation & Terrain
-                        </span>
-                        <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
-                          {aboutPage.story[1]}
-                        </p>
-                      </div>
-                    </div>
-                  </Reveal>
-                )}
-
-                {aboutPage.story[2] && (
-                  <Reveal className="h-full">
-                    <div className="h-full rounded-2xl border border-border/80 bg-card p-6 shadow-sm flex flex-col justify-between">
-                      <div>
-                        <span className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-primary mb-3">
-                          <Briefcase size={15} /> Réseaux & Développement
-                        </span>
-                        <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
-                          {aboutPage.story[2]}
-                        </p>
-                      </div>
-                    </div>
-                  </Reveal>
-                )}
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
+                    <Sparkles size={13} /> Lubumbashi & RDC
+                  </span>
+                </div>
+                <AnimatedStats />
               </div>
-
-              {/* Engagement / Conclusion */}
-              {aboutPage.story[3] && (
-                <Reveal>
-                  <div className="rounded-2xl border border-border/80 bg-muted/40 p-5 sm:p-6 text-sm sm:text-base text-foreground/90 leading-relaxed">
-                    <strong className="text-primary font-semibold">Ma ligne de conduite : </strong>
-                    {aboutPage.story[3]}
-                  </div>
-                </Reveal>
-              )}
-            </div>
-
-            {/* Statistiques réelles */}
-            <div className="mt-10">
-              <AnimatedStats />
-            </div>
+            </Reveal>
           </div>
         </section>
 
-        {/* Valeurs */}
-        <section className="border-y border-border bg-muted py-20 md:py-28">
+        {/* Section Partenaires / Marques — bandeau marquee épuré */}
+        <BrandsMarquee />
+
+        {/* Ce qui me guide / Les Valeurs */}
+        <section className="border-y border-border bg-muted/40 py-20 md:py-28">
           <div className={container}>
             <Reveal>
-              <SectionHeading eyebrow="Ma façon de travailler" title={aboutPage.valuesTitle} />
-              <p className="max-w-2xl text-lg text-muted-foreground">{aboutPage.valuesIntro}</p>
+              <SectionHeading
+                number="03"
+                eyebrow="Méthode & Déontologie"
+                title="Quatre principes directeurs,"
+                accent="sans compromis."
+                description={aboutPage.valuesIntro}
+              />
             </Reveal>
-            <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
               {aboutPage.values.map((v, i) => {
                 const Icon = valueIcons[i % valueIcons.length] ?? ShieldCheck;
                 return (
                   <Reveal key={v.title}>
-                    <div className="card-hover h-full rounded-3xl border border-border bg-card p-7 shadow-card">
-                      <div className="grid h-12 w-12 place-items-center rounded-2xl bg-accent text-primary"><Icon size={22} aria-hidden /></div>
-                      <h3 className="mt-5 text-xl font-semibold">{v.title}</h3>
-                      <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{v.text}</p>
+                    <div className="pillar-card flex h-full flex-col justify-between rounded-[28px] border border-border/70 bg-card p-7 shadow-sm">
+                      <div>
+                        <div className="grid h-12 w-12 place-items-center rounded-2xl bg-primary/10 text-primary">
+                          <Icon size={22} aria-hidden />
+                        </div>
+                        <h3 className="mt-5 font-serif text-xl font-medium text-foreground">
+                          {v.title}
+                        </h3>
+                        <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                          {v.text}
+                        </p>
+                      </div>
                     </div>
                   </Reveal>
                 );
@@ -168,41 +241,82 @@ function APropos() {
           </div>
         </section>
 
-        {/* Frise chronologique */}
+        {/* Parcours chronologique */}
         <section className="py-20 md:py-28">
           <div className={`${container} max-w-3xl`}>
-            <Reveal><SectionHeading eyebrow="Parcours" title={aboutPage.milestonesTitle} /></Reveal>
-            {timelineQ.isPending ? <ContentLoading rows={4} /> : timelineQ.isError ? <ContentError label="le parcours" onRetry={() => timelineQ.refetch()} /> :
-            <ol className="relative ml-5 border-l-2 border-border">
-              {(timelineQ.data ?? []).map((t) => {
-                const Icon = t.kind === "formation" ? GraduationCap : Briefcase;
-                return (
-                  <li key={t.id} className="relative mb-8 pl-10 last:mb-0">
-                    <span className="absolute -left-[21px] grid h-10 w-10 place-items-center rounded-full border-4 border-background bg-gradient-primary text-primary-foreground" aria-hidden><Icon size={16} /></span>
-                    <Reveal className="rounded-2xl border border-border bg-card p-5 shadow-card">
-                      <p className="text-xs font-semibold uppercase tracking-wider text-primary">{t.period}</p>
-                      <h3 className="mt-1 text-lg font-bold">{t.title}</h3>
-                      <p className="text-sm font-medium text-foreground/80">{t.organization}</p>
-                      <p className="mt-2 text-sm text-muted-foreground">{t.description}</p>
-                    </Reveal>
-                  </li>
-                );
-              })}
-            </ol>}
+            <Reveal>
+              <SectionHeading
+                number="04"
+                eyebrow="Chronologie"
+                title="Les étapes marquantes"
+                accent="du parcours."
+                description="Une continuité d'apprentissage et de réalisations sur le terrain."
+              />
+            </Reveal>
+
+            {timelineQ.isPending ? (
+              <ContentLoading rows={4} />
+            ) : timelineQ.isError ? (
+              <ContentError label="le parcours" onRetry={() => timelineQ.refetch()} />
+            ) : (
+              <ol className="relative ml-5 border-l-2 border-border/80">
+                {(timelineQ.data ?? []).map((t) => {
+                  const Icon = t.kind === "formation" ? GraduationCap : Briefcase;
+                  return (
+                    <li key={t.id} className="relative mb-8 pl-10 last:mb-0">
+                      <span
+                        className="absolute -left-[21px] grid h-10 w-10 place-items-center rounded-full border-4 border-muted/80 bg-gradient-primary text-primary-foreground shadow-sm"
+                        aria-hidden
+                      >
+                        <Icon size={16} />
+                      </span>
+                      <Reveal className="pillar-card rounded-[24px] border border-border/70 bg-card p-5 sm:p-6 shadow-sm">
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="text-xs font-semibold uppercase tracking-wider text-primary">
+                            {t.period}
+                          </span>
+                          <span className="rounded-full bg-secondary px-2.5 py-0.5 text-[11px] font-medium text-secondary-foreground">
+                            {t.kind === "formation" ? "Formation" : "Expérience"}
+                          </span>
+                        </div>
+                        <h3 className="mt-2 font-serif text-lg sm:text-xl font-medium tracking-tight text-foreground">
+                          {t.title}
+                        </h3>
+                        <p className="text-sm font-semibold text-foreground/80">{t.organization}</p>
+                        <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{t.description}</p>
+                      </Reveal>
+                    </li>
+                  );
+                })}
+              </ol>
+            )}
           </div>
         </section>
 
-        {/* Appel à l'action */}
+        {/* Appel à l'action invitant vers la page /contact */}
         <section className="relative overflow-hidden bg-hero py-20 text-ink-foreground md:py-28">
           <div className="bg-grid pointer-events-none absolute inset-0" aria-hidden />
           <div className={`${container} relative text-center`}>
-            <Reveal>
-              <h2 className="mx-auto max-w-2xl text-3xl font-semibold md:text-5xl">{aboutPage.ctaTitle}</h2>
-              <p className="mx-auto mt-5 max-w-xl text-lg leading-relaxed text-ink-foreground/70">{aboutPage.ctaText}</p>
+            <Reveal className="mx-auto max-w-2xl">
+              <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-normal leading-tight">
+                {aboutPage.ctaTitle}
+              </h2>
+              <p className="mt-5 text-base sm:text-lg leading-relaxed text-ink-foreground/75">
+                {aboutPage.ctaText}
+              </p>
               <div className="mt-9 flex flex-wrap justify-center gap-3">
-                <Link to="/" hash="contact" className={btnPrimary}>{aboutPage.cta} <ArrowRight size={16} /></Link>
-                <Button asChild size="lg" variant="outline" className="rounded-full border-ink-foreground/20 bg-ink-foreground/5 text-ink-foreground hover:bg-ink-foreground/10">
-                  <Link to="/"><ArrowLeft size={16} /> {aboutPage.back}</Link>
+                <Link to="/contact" className={btnPrimary}>
+                  Lancer un projet ensemble <ArrowRight size={16} />
+                </Link>
+                <Button
+                  asChild
+                  size="lg"
+                  variant="outline"
+                  className="rounded-full border-white/20 bg-white/10 text-white hover:bg-white/20"
+                >
+                  <Link to="/">
+                    <ArrowLeft size={16} /> {aboutPage.back}
+                  </Link>
                 </Button>
               </div>
             </Reveal>
@@ -211,8 +325,6 @@ function APropos() {
       </main>
 
       <Footer />
-
-      <WhatsAppFloat />
     </div>
   );
 }

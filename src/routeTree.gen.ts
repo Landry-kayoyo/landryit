@@ -14,11 +14,13 @@ import { Route as AProposRouteImport } from './routes/a-propos'
 import { Route as AccesRefuseRouteImport } from './routes/acces-refuse'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as ConnexionRequiseRouteImport } from './routes/connexion-requise'
+import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminCertificationsRouteImport } from './routes/admin.certifications'
 import { Route as AdminCompteRouteImport } from './routes/admin.compte'
 import { Route as AdminMediasRouteImport } from './routes/admin.medias'
 import { Route as AdminMessagesRouteImport } from './routes/admin.messages'
+import { Route as AdminOrganisationsRouteImport } from './routes/admin.organisations'
 import { Route as AdminParcoursRouteImport } from './routes/admin.parcours'
 import { Route as AdminLoginRouteImport } from './routes/admin_.login'
 import { Route as ApiCloudinarySignRouteImport } from './routes/api/cloudinary-sign'
@@ -56,6 +58,11 @@ const ConnexionRequiseRoute = ConnexionRequiseRouteImport.update({
   path: '/connexion-requise',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -79,6 +86,11 @@ const AdminMediasRoute = AdminMediasRouteImport.update({
 const AdminMessagesRoute = AdminMessagesRouteImport.update({
   id: '/messages',
   path: '/messages',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminOrganisationsRoute = AdminOrganisationsRouteImport.update({
+  id: '/organisations',
+  path: '/organisations',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminParcoursRoute = AdminParcoursRouteImport.update({
@@ -144,10 +156,12 @@ export interface FileRoutesByFullPath {
   '/acces-refuse': typeof AccesRefuseRoute
   '/admin': typeof AdminRouteWithChildren
   '/connexion-requise': typeof ConnexionRequiseRoute
+  '/contact': typeof ContactRoute
   '/admin/certifications': typeof AdminCertificationsRoute
   '/admin/compte': typeof AdminCompteRoute
   '/admin/medias': typeof AdminMediasRoute
   '/admin/messages': typeof AdminMessagesRoute
+  '/admin/organisations': typeof AdminOrganisationsRoute
   '/admin/parcours': typeof AdminParcoursRoute
   '/admin/login': typeof AdminLoginRoute
   '/api/cloudinary-sign': typeof ApiCloudinarySignRoute
@@ -166,10 +180,12 @@ export interface FileRoutesByTo {
   '/a-propos': typeof AProposRoute
   '/acces-refuse': typeof AccesRefuseRoute
   '/connexion-requise': typeof ConnexionRequiseRoute
+  '/contact': typeof ContactRoute
   '/admin/certifications': typeof AdminCertificationsRoute
   '/admin/compte': typeof AdminCompteRoute
   '/admin/medias': typeof AdminMediasRoute
   '/admin/messages': typeof AdminMessagesRoute
+  '/admin/organisations': typeof AdminOrganisationsRoute
   '/admin/parcours': typeof AdminParcoursRoute
   '/admin/login': typeof AdminLoginRoute
   '/api/cloudinary-sign': typeof ApiCloudinarySignRoute
@@ -190,10 +206,12 @@ export interface FileRoutesById {
   '/acces-refuse': typeof AccesRefuseRoute
   '/admin': typeof AdminRouteWithChildren
   '/connexion-requise': typeof ConnexionRequiseRoute
+  '/contact': typeof ContactRoute
   '/admin/certifications': typeof AdminCertificationsRoute
   '/admin/compte': typeof AdminCompteRoute
   '/admin/medias': typeof AdminMediasRoute
   '/admin/messages': typeof AdminMessagesRoute
+  '/admin/organisations': typeof AdminOrganisationsRoute
   '/admin/parcours': typeof AdminParcoursRoute
   '/admin_/login': typeof AdminLoginRoute
   '/api/cloudinary-sign': typeof ApiCloudinarySignRoute
@@ -215,10 +233,12 @@ export interface FileRouteTypes {
     | '/acces-refuse'
     | '/admin'
     | '/connexion-requise'
+    | '/contact'
     | '/admin/certifications'
     | '/admin/compte'
     | '/admin/medias'
     | '/admin/messages'
+    | '/admin/organisations'
     | '/admin/parcours'
     | '/admin/login'
     | '/api/cloudinary-sign'
@@ -237,10 +257,12 @@ export interface FileRouteTypes {
     | '/a-propos'
     | '/acces-refuse'
     | '/connexion-requise'
+    | '/contact'
     | '/admin/certifications'
     | '/admin/compte'
     | '/admin/medias'
     | '/admin/messages'
+    | '/admin/organisations'
     | '/admin/parcours'
     | '/admin/login'
     | '/api/cloudinary-sign'
@@ -260,10 +282,12 @@ export interface FileRouteTypes {
     | '/acces-refuse'
     | '/admin'
     | '/connexion-requise'
+    | '/contact'
     | '/admin/certifications'
     | '/admin/compte'
     | '/admin/medias'
     | '/admin/messages'
+    | '/admin/organisations'
     | '/admin/parcours'
     | '/admin_/login'
     | '/api/cloudinary-sign'
@@ -284,6 +308,7 @@ export interface RootRouteChildren {
   AccesRefuseRoute: typeof AccesRefuseRoute
   AdminRoute: typeof AdminRouteWithChildren
   ConnexionRequiseRoute: typeof ConnexionRequiseRoute
+  ContactRoute: typeof ContactRoute
   AdminLoginRoute: typeof AdminLoginRoute
   ApiCloudinarySignRoute: typeof ApiCloudinarySignRoute
   ApiContactRoute: typeof ApiContactRoute
@@ -330,6 +355,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ConnexionRequiseRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/': {
       id: '/admin/'
       path: '/'
@@ -363,6 +395,13 @@ declare module '@tanstack/react-router' {
       path: '/messages'
       fullPath: '/admin/messages'
       preLoaderRoute: typeof AdminMessagesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/organisations': {
+      id: '/admin/organisations'
+      path: '/organisations'
+      fullPath: '/admin/organisations'
+      preLoaderRoute: typeof AdminOrganisationsRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/parcours': {
@@ -450,6 +489,7 @@ interface AdminRouteChildren {
   AdminCompteRoute: typeof AdminCompteRoute
   AdminMediasRoute: typeof AdminMediasRoute
   AdminMessagesRoute: typeof AdminMessagesRoute
+  AdminOrganisationsRoute: typeof AdminOrganisationsRoute
   AdminParcoursRoute: typeof AdminParcoursRoute
   AdminIndexRoute: typeof AdminIndexRoute
   AdminProjetsIdRoute: typeof AdminProjetsIdRoute
@@ -462,6 +502,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminCompteRoute: AdminCompteRoute,
   AdminMediasRoute: AdminMediasRoute,
   AdminMessagesRoute: AdminMessagesRoute,
+  AdminOrganisationsRoute: AdminOrganisationsRoute,
   AdminParcoursRoute: AdminParcoursRoute,
   AdminIndexRoute: AdminIndexRoute,
   AdminProjetsIdRoute: AdminProjetsIdRoute,
@@ -477,6 +518,7 @@ const rootRouteChildren: RootRouteChildren = {
   AccesRefuseRoute: AccesRefuseRoute,
   AdminRoute: AdminRouteWithChildren,
   ConnexionRequiseRoute: ConnexionRequiseRoute,
+  ContactRoute: ContactRoute,
   AdminLoginRoute: AdminLoginRoute,
   ApiCloudinarySignRoute: ApiCloudinarySignRoute,
   ApiContactRoute: ApiContactRoute,

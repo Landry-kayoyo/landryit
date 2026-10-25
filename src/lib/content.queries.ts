@@ -25,3 +25,36 @@ export const cvUrlQuery = queryOptions({
   },
   staleTime: 5 * 60_000,
 });
+
+export const BRANDS_KEY = "partner_brands";
+
+export interface PublicBrand {
+  id: string;
+  name: string;
+  logo_url?: string | null;
+  published: boolean;
+  sort_order: number;
+}
+
+/** Logos et organisations partenaires gérés depuis l'admin. */
+export const brandsQuery = queryOptions({
+  queryKey: ["public", "brands"],
+  queryFn: async (): Promise<PublicBrand[]> => {
+    const { data } = await supabase.from("app_settings").select("value").eq("key", BRANDS_KEY).maybeSingle();
+    if (data?.value && Array.isArray(data.value) && data.value.length > 0) {
+      return (data.value as PublicBrand[])
+        .filter((b) => b.published !== false)
+        .sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0));
+    }
+    // Fallback dynamique
+    const { brands: defaultBrands } = await import("@/content/portfolio");
+    return defaultBrands.map((b, i) => ({
+      id: `default-${i}`,
+      name: b.name,
+      logo_url: null,
+      published: true,
+      sort_order: i,
+    }));
+  },
+  staleTime: 60_000,
+});

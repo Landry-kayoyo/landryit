@@ -3,59 +3,140 @@ import { ArrowUpRight, Globe } from "lucide-react";
 import { projectPage as copy } from "@/content/portfolio";
 import type { PublicProject as Project } from "@/lib/content.queries";
 
-export function ProjectCard({ p, index, featured = false }: { p: Project; index: number; featured?: boolean }) {
+export function ProjectCard({
+  p,
+  index,
+  featured = false,
+}: {
+  p: Project;
+  index: number;
+  featured?: boolean;
+}) {
   return (
-    <div
-      className={`group card-hover relative flex h-full flex-col overflow-hidden rounded-3xl border border-border bg-card shadow-card focus-within:outline-none focus-within:ring-2 focus-within:ring-ring ${featured ? "md:col-span-2 md:flex-row" : ""}`}
+    <article
+      className={`group pillar-card relative flex h-full flex-col overflow-hidden rounded-[28px] border border-border/70 bg-card p-3 sm:p-3.5 shadow-sm transition-all duration-400 focus-within:outline-none focus-within:ring-2 focus-within:ring-ring ${
+        featured ? "md:col-span-2 md:flex-row md:p-4" : ""
+      }`}
     >
-      {/* Lien étendu : tout le carré reste cliquable vers la page du projet. */}
+      {/* Lien étendu : tout le bloc reste cliquable vers la page de détail */}
       <Link
         to="/projets/$slug"
         params={{ slug: p.slug }}
         aria-label={`${copy.readMore} : ${p.title}`}
-        className="absolute inset-0 z-10 rounded-3xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        className="absolute inset-0 z-10 rounded-[28px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       />
-      <div className={`relative overflow-hidden ${featured ? "md:w-3/5" : ""}`}>
+
+      {/* Cadre de prévisualisation média */}
+      <div
+        className={`relative overflow-hidden rounded-[20px] bg-muted/70 ${
+          featured ? "md:w-3/5" : ""
+        }`}
+      >
         <img
           src={p.image_url ?? ""}
           alt={p.image_alt}
           width={1200}
           height={800}
           loading="lazy"
-          className={`aspect-[3/2] w-full object-cover transition duration-700 group-hover:scale-105 ${featured ? "md:h-full" : ""}`}
+          className={`aspect-[16/10] w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04] ${
+            featured ? "md:h-full" : ""
+          }`}
         />
-        <span className="absolute left-4 top-4 rounded-full bg-card px-3 py-1 text-xs font-semibold text-foreground shadow-card">{p.tag}</span>
-        {p.external_url && (
-          <span className="absolute right-4 top-4 inline-flex items-center gap-1.5 rounded-full bg-primary px-3 py-1 text-xs font-semibold text-primary-foreground shadow-card">
-            <Globe size={12} />
-            {copy.liveBadge}
+        {/* Dégradé léger en surimpression */}
+        <div
+          className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent opacity-60 transition-opacity duration-300 group-hover:opacity-40"
+          aria-hidden="true"
+        />
+
+        {/* Badges flottants sur l'image */}
+        <div className="absolute left-3.5 top-3.5 flex items-center gap-2">
+          <span className="rounded-full border border-white/20 bg-background/90 px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-foreground shadow-sm backdrop-blur-md">
+            {p.tag}
           </span>
-        )}
-      </div>
-      <div className={`flex flex-1 flex-col p-6 md:p-8 ${featured ? "md:w-2/5 md:justify-center" : ""}`}>
-        <span className="font-display text-sm font-semibold text-primary">0{index + 1}</span>
-        <h3 className={`mt-2 font-semibold leading-snug ${featured ? "text-2xl md:text-3xl" : "text-xl md:text-2xl"}`}>{p.title}</h3>
-        <p className="mt-3 line-clamp-3 leading-relaxed text-muted-foreground">{p.summary}</p>
-        <ul className="mt-5 flex flex-wrap gap-2" aria-label="Technologies utilisées">
-          {p.technologies.slice(0, 4).map((t) => <li key={t} className="rounded-full bg-secondary px-3 py-1 text-xs font-semibold text-secondary-foreground">{t}</li>)}
-        </ul>
-        <span className="mt-auto inline-flex items-center gap-2 pt-6 text-sm font-semibold text-primary">
-          {copy.readMore}
-          <ArrowUpRight size={16} className="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-        </span>
+        </div>
+
         {p.external_url && (
-          <a
-            href={p.external_url ?? undefined}
-            target="_blank"
-            rel="noreferrer"
-            className="relative z-20 mt-3 inline-flex w-fit items-center gap-2 rounded-full border border-primary/40 px-4 py-2 text-xs font-semibold text-primary transition-colors hover:bg-primary hover:text-primary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          >
-            <Globe size={14} />
-            {copy.liveShort}
-            <ArrowUpRight size={14} />
-          </a>
+          <div className="absolute right-3.5 top-3.5 flex items-center">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/95 px-3 py-1 text-[11px] font-semibold text-primary-foreground shadow-sm backdrop-blur-md">
+              <span className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" />
+              {copy.liveBadge}
+            </span>
+          </div>
         )}
       </div>
-    </div>
+
+      {/* Corps éditorial de la carte */}
+      <div
+        className={`flex flex-1 flex-col px-3 sm:px-4 pt-4 sm:pt-5 pb-2 ${
+          featured ? "md:w-2/5 md:justify-center md:px-6 md:py-4" : ""
+        }`}
+      >
+        {/* En-tête numéroté */}
+        <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-[0.2em] text-primary">
+          <div className="flex items-center gap-2">
+            <span className="font-serif text-sm font-bold text-primary">
+              0{index + 1}
+            </span>
+            <span className="h-[1.5px] w-4 rounded-full bg-primary/40" />
+            <span className="text-muted-foreground tracking-wider">{p.tag}</span>
+          </div>
+          <span className="hidden sm:inline-block text-[11px] font-medium text-muted-foreground/70">
+            {copy.eyebrow}
+          </span>
+        </div>
+
+        {/* Titre du projet */}
+        <h3
+          className={`mt-2.5 font-serif font-medium leading-snug tracking-tight text-foreground transition-colors duration-300 group-hover:text-primary ${
+            featured ? "text-2xl md:text-3xl" : "text-xl sm:text-2xl"
+          }`}
+        >
+          {p.title}
+        </h3>
+
+        {/* Résumé textuel */}
+        <p className="mt-2.5 line-clamp-3 text-sm sm:text-[15px] leading-relaxed text-muted-foreground">
+          {p.summary}
+        </p>
+
+        {/* Chips technologiques */}
+        <ul
+          className="mt-5 flex flex-wrap gap-1.5"
+          aria-label="Technologies utilisées"
+        >
+          {p.technologies.slice(0, 4).map((t) => (
+            <li
+              key={t}
+              className="rounded-full border border-border/50 bg-secondary/80 px-2.5 py-0.5 text-xs font-medium text-secondary-foreground transition-colors group-hover:border-primary/25"
+            >
+              {t}
+            </li>
+          ))}
+        </ul>
+
+        {/* Barre d'action inférieure */}
+        <div className="mt-6 flex items-center justify-between gap-3 border-t border-border/50 pt-4">
+          <span className="inline-flex items-center gap-2 text-sm font-semibold text-primary transition-all duration-300 group-hover:gap-3">
+            <span>{copy.readMore}</span>
+            <span className="grid h-7 w-7 place-items-center rounded-full bg-primary/10 text-primary transition-all duration-300 group-hover:bg-primary group-hover:text-primary-foreground group-hover:shadow-glow">
+              <ArrowUpRight size={14} />
+            </span>
+          </span>
+
+          {p.external_url && (
+            <a
+              href={p.external_url}
+              target="_blank"
+              rel="noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              className="relative z-20 inline-flex items-center gap-1.5 rounded-full border border-border/70 bg-background/80 px-3 py-1 text-xs font-medium text-foreground transition-colors hover:border-primary/50 hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              <Globe size={12} className="text-primary" />
+              <span>{copy.liveShort}</span>
+            </a>
+          )}
+        </div>
+      </div>
+    </article>
   );
 }
