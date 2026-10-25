@@ -191,7 +191,7 @@ function ProjectDetail() {
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
                 <Button asChild size="lg" className="rounded-full bg-gradient-primary gap-2 shadow-glow">
-                  <Link to="/" hash="contact">
+                  <Link to="/contact">
                     <Mail size={16} /> Démarrer un projet <ArrowRight size={15} />
                   </Link>
                 </Button>
