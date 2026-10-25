@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Award, Briefcase, CheckCircle2, Code2, Download, Github, GraduationCap,
+import { ArrowRight, Award, Briefcase, CheckCircle2, Code2, Github, GraduationCap,
   Languages, Linkedin, Mail, MapPin, Network, Phone, Server, ShieldCheck, Sparkles, Wrench,
 } from "lucide-react";
 import { Header } from "@/components/portfolio/Header";
@@ -51,17 +51,7 @@ const btnGhostDark = `inline-flex items-center justify-center gap-2 rounded-full
 const container = "mx-auto w-full max-w-6xl px-5 md:px-8";
 const skillIcons = { server: Server, network: Network, shield: ShieldCheck, code: Code2, wrench: Wrench } as const;
 
-/** Bouton de téléchargement du CV */
-function CvDownloadButton({ className }: { className: string }) {
-  const { data: cloudUrl } = useQuery(cvUrlQuery);
-  const href = cloudUrl ?? profile.cvUrl;
-  if (!href) return null;
-  return (
-    <a href={href} download="CV-Landry-Kayoyo.pdf" target="_blank" rel="noreferrer" className={className}>
-      <Download size={16} /> Télécharger mon CV
-    </a>
-  );
-}
+
 
 function Hero() {
   return (
@@ -458,21 +448,10 @@ function Index() {
               <p className="mt-5 text-base sm:text-lg leading-relaxed text-ink-foreground/75 max-w-xl mx-auto">
                 Que vous ayez un réseau à installer, des données à sécuriser ou une application web moderne à développer, échangeons sur votre besoin.
               </p>
-              <div className="mt-9 flex flex-wrap justify-center gap-3">
+              <div className="mt-9 flex justify-center">
                 <Link to="/contact" className={btnPrimary}>
                   Échanger sur votre projet <ArrowRight size={16} />
                 </Link>
-                <Button
-                  asChild
-                  size="lg"
-                  variant="outline"
-                  className="rounded-full border-white/20 bg-white/10 text-white hover:bg-white/20"
-                >
-                  <Link to="/projets">
-                    Explorer les réalisations
-                  </Link>
-                </Button>
-                <CvDownloadButton className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-white/10 px-6 py-3.5 text-sm font-semibold text-white backdrop-blur-md transition duration-300 hover:bg-white/20 hover:border-white/40" />
               </div>
             </Reveal>
           </div>
