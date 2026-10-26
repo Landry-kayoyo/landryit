@@ -6,7 +6,9 @@ import { z } from "zod";
 const contactSchema = z.object({
   name: z.string().trim().min(1, "Le nom est requis").max(100),
   email: z.string().trim().email("Email invalide").max(255),
-  message: z.string().trim().min(5, "Message trop court").max(3000),
+  subject: z.string().trim().min(1, "L'objet du message est requis").max(200),
+  phone: z.string().trim().max(50).optional().nullable(),
+  message: z.string().trim().min(5, "Message trop court (5 caractères minimum)").max(3000),
 });
 
 export const Route = createFileRoute("/api/contact")({
@@ -24,7 +26,7 @@ export const Route = createFileRoute("/api/contact")({
             );
           }
 
-          const { name, email, message } = parsed.data;
+          const { name, email, subject, phone, message } = parsed.data;
 
           // 1. Sauvegarde en base de données dans la table contact_messages
           try {
@@ -33,10 +35,21 @@ export const Route = createFileRoute("/api/contact")({
               process.env["SUPABASE_SERVICE_ROLE_KEY"]!,
               { auth: { persistSession: false, autoRefreshToken: false } },
             );
+
+            const formattedMessage = [
+              `[Objet : ${subject}]`,
+              phone ? `[Téléphone : ${phone}]` : null,
+              "",
+              message,
+            ]
+              .filter((line) => line !== null)
+              .join("\n");
+
+            // Insère avec repli automatique compatible
             await supabase.from("contact_messages").insert({
               name,
               email,
-              message,
+              message: formattedMessage,
               status: "unread",
             });
           } catch (dbErr) {
@@ -66,11 +79,12 @@ export const Route = createFileRoute("/api/contact")({
             },
           });
 
-          const mailSubject = `[Portfolio] Nouveau message de ${name}`;
+          const mailSubject = `[Portfolio] ${subject} — ${name}`;
           const mailText = `Nouveau message reçu depuis le portfolio :
 
 Nom : ${name}
 Email : ${email}
+${phone ? `Téléphone : ${phone}\n` : ""}Objet : ${subject}
 
 Message :
 ${message}
@@ -83,7 +97,7 @@ ${message}
               </h2>
               <table style="width: 100%; border-collapse: collapse; margin-top: 16px;">
                 <tr>
-                  <td style="padding: 8px 0; color: #64748b; font-size: 14px; width: 80px;"><strong>Expéditeur :</strong></td>
+                  <td style="padding: 8px 0; color: #64748b; font-size: 14px; width: 100px;"><strong>Expéditeur :</strong></td>
                   <td style="padding: 8px 0; color: #0f172a; font-size: 15px; font-weight: 600;">${escapeHtml(name)}</td>
                 </tr>
                 <tr>
@@ -91,6 +105,17 @@ ${message}
                   <td style="padding: 8px 0; color: #2563eb; font-size: 15px;">
                     <a href="mailto:${escapeHtml(email)}" style="color: #2563eb; text-decoration: none;">${escapeHtml(email)}</a>
                   </td>
+                </tr>
+                ${phone ? `
+                <tr>
+                  <td style="padding: 8px 0; color: #64748b; font-size: 14px;"><strong>Téléphone :</strong></td>
+                  <td style="padding: 8px 0; color: #0f172a; font-size: 15px;">
+                    <a href="tel:${escapeHtml(phone)}" style="color: #0f172a; text-decoration: none;">${escapeHtml(phone)}</a>
+                  </td>
+                </tr>` : ""}
+                <tr>
+                  <td style="padding: 8px 0; color: #64748b; font-size: 14px;"><strong>Objet :</strong></td>
+                  <td style="padding: 8px 0; color: #0f172a; font-size: 15px; font-weight: 600;">${escapeHtml(subject)}</td>
                 </tr>
               </table>
               <div style="margin-top: 20px; padding: 16px; background-color: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0;">

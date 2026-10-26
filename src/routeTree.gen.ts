@@ -18,6 +18,7 @@ import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminCertificationsRouteImport } from './routes/admin.certifications'
 import { Route as AdminCompteRouteImport } from './routes/admin.compte'
+import { Route as AdminImmersionRouteImport } from './routes/admin.immersion'
 import { Route as AdminMediasRouteImport } from './routes/admin.medias'
 import { Route as AdminMessagesRouteImport } from './routes/admin.messages'
 import { Route as AdminOrganisationsRouteImport } from './routes/admin.organisations'
@@ -76,6 +77,11 @@ const AdminCertificationsRoute = AdminCertificationsRouteImport.update({
 const AdminCompteRoute = AdminCompteRouteImport.update({
   id: '/compte',
   path: '/compte',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminImmersionRoute = AdminImmersionRouteImport.update({
+  id: '/immersion',
+  path: '/immersion',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminMediasRoute = AdminMediasRouteImport.update({
@@ -159,6 +165,7 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/admin/certifications': typeof AdminCertificationsRoute
   '/admin/compte': typeof AdminCompteRoute
+  '/admin/immersion': typeof AdminImmersionRoute
   '/admin/medias': typeof AdminMediasRoute
   '/admin/messages': typeof AdminMessagesRoute
   '/admin/organisations': typeof AdminOrganisationsRoute
@@ -183,6 +190,7 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/admin/certifications': typeof AdminCertificationsRoute
   '/admin/compte': typeof AdminCompteRoute
+  '/admin/immersion': typeof AdminImmersionRoute
   '/admin/medias': typeof AdminMediasRoute
   '/admin/messages': typeof AdminMessagesRoute
   '/admin/organisations': typeof AdminOrganisationsRoute
@@ -209,6 +217,7 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/admin/certifications': typeof AdminCertificationsRoute
   '/admin/compte': typeof AdminCompteRoute
+  '/admin/immersion': typeof AdminImmersionRoute
   '/admin/medias': typeof AdminMediasRoute
   '/admin/messages': typeof AdminMessagesRoute
   '/admin/organisations': typeof AdminOrganisationsRoute
@@ -236,6 +245,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/admin/certifications'
     | '/admin/compte'
+    | '/admin/immersion'
     | '/admin/medias'
     | '/admin/messages'
     | '/admin/organisations'
@@ -260,6 +270,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/admin/certifications'
     | '/admin/compte'
+    | '/admin/immersion'
     | '/admin/medias'
     | '/admin/messages'
     | '/admin/organisations'
@@ -285,6 +296,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/admin/certifications'
     | '/admin/compte'
+    | '/admin/immersion'
     | '/admin/medias'
     | '/admin/messages'
     | '/admin/organisations'
@@ -381,6 +393,13 @@ declare module '@tanstack/react-router' {
       path: '/compte'
       fullPath: '/admin/compte'
       preLoaderRoute: typeof AdminCompteRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/immersion': {
+      id: '/admin/immersion'
+      path: '/immersion'
+      fullPath: '/admin/immersion'
+      preLoaderRoute: typeof AdminImmersionRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/medias': {
@@ -487,6 +506,7 @@ declare module '@tanstack/react-router' {
 interface AdminRouteChildren {
   AdminCertificationsRoute: typeof AdminCertificationsRoute
   AdminCompteRoute: typeof AdminCompteRoute
+  AdminImmersionRoute: typeof AdminImmersionRoute
   AdminMediasRoute: typeof AdminMediasRoute
   AdminMessagesRoute: typeof AdminMessagesRoute
   AdminOrganisationsRoute: typeof AdminOrganisationsRoute
@@ -500,6 +520,7 @@ interface AdminRouteChildren {
 const AdminRouteChildren: AdminRouteChildren = {
   AdminCertificationsRoute: AdminCertificationsRoute,
   AdminCompteRoute: AdminCompteRoute,
+  AdminImmersionRoute: AdminImmersionRoute,
   AdminMediasRoute: AdminMediasRoute,
   AdminMessagesRoute: AdminMessagesRoute,
   AdminOrganisationsRoute: AdminOrganisationsRoute,

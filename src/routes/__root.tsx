@@ -12,6 +12,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { NotFoundPage, ServerErrorPage } from "@/components/portfolio/ErrorPage";
 import { ImageFallback, OfflineBanner } from "@/components/portfolio/AppStatus";
+import { isPreviewDeployment } from "@/lib/siteConfig";
 
 function NotFoundComponent() {
   return <NotFoundPage />;
@@ -34,6 +35,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "author", content: "Landry Kayoyo" },
       { property: "og:type", content: "website" },
       { property: "og:site_name", content: "Landry Kayoyo" },
+      ...(isPreviewDeployment ? [{ name: "robots", content: "noindex, nofollow" }] : []),
     ],
     links: [
       {

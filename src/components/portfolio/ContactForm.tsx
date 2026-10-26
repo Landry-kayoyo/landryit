@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from "react";
 import { z } from "zod";
-import { CheckCircle2, Send, Sparkles } from "lucide-react";
+import { CheckCircle2, Send } from "lucide-react";
 import { profile } from "@/content/portfolio";
 import { errorBtn } from "@/components/portfolio/ErrorPage";
 import { Button } from "@/components/ui/button";
@@ -16,28 +16,32 @@ const schema = z.object({
   name: z
     .string()
     .trim()
-    .min(1, "Ce champ est obligatoire : indiquez votre nom")
+    .min(1, "Veuillez indiquer votre nom")
     .max(100, "100 caractères maximum"),
   email: z
     .string()
     .trim()
-    .min(1, "Ce champ est obligatoire : indiquez votre email")
-    .email("Adresse email invalide (exemple : nom@domaine.com)")
+    .min(1, "Veuillez indiquer votre email")
+    .email("Adresse email invalide")
     .max(255, "255 caractères maximum"),
+  subject: z
+    .string()
+    .trim()
+    .min(1, "Veuillez préciser l'objet")
+    .max(200, "200 caractères maximum"),
   message: z
     .string()
     .trim()
-    .min(1, "Ce champ est obligatoire : écrivez votre message")
+    .min(1, "Veuillez écrire votre message")
     .min(10, "Message trop court (10 caractères minimum)")
-    .max(1000, "1000 caractères maximum"),
+    .max(3000, "3000 caractères maximum"),
 });
 
-type Errors = Partial<Record<"name" | "email" | "message", string>>;
+type Errors = Partial<Record<"name" | "email" | "subject" | "message", string>>;
 
-const field =
-  "w-full rounded-xl border border-input bg-card px-4 py-3 text-foreground placeholder:text-muted-foreground transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary";
+const fieldBase =
+  "w-full rounded-xl border border-input bg-card px-4 py-3 text-sm sm:text-base text-foreground placeholder:text-muted-foreground/70 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary";
 
-// Envoi du message via notre API serveur sécurisée configurée en SMTP
 async function sendMessage(d: z.infer<typeof schema>) {
   const res = await fetch("/api/contact", {
     method: "POST",
@@ -58,7 +62,7 @@ export function ContactForm() {
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "failed">("idle");
   const [serverError, setServerError] = useState<string | null>(null);
   const [confirmOpen, setConfirmOpen] = useState(false);
-  const [sentInfo, setSentInfo] = useState<{ name: string; email: string } | null>(null);
+  const [sentInfo, setSentInfo] = useState<{ name: string; email: string; subject: string } | null>(null);
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -84,7 +88,11 @@ export function ContactForm() {
 
     try {
       await sendMessage(r.data);
-      setSentInfo({ name: r.data.name, email: r.data.email });
+      setSentInfo({
+        name: r.data.name,
+        email: r.data.email,
+        subject: r.data.subject,
+      });
       setStatus("sent");
       setConfirmOpen(true);
       form.reset();
@@ -97,44 +105,84 @@ export function ContactForm() {
 
   return (
     <>
-      <form
-        onSubmit={onSubmit}
-        noValidate
-        className="space-y-5 rounded-3xl border border-border bg-card p-6 shadow-card md:p-8"
-      >
-        {(["name", "email"] as const).map((k) => (
-          <div key={k}>
-            <label htmlFor={k} className="mb-2 block text-sm font-semibold text-foreground">
-              {k === "name" ? "Nom" : "Email"}
+      <form onSubmit={onSubmit} noValidate className="space-y-5">
+        {/* Ligne 1 : Nom complet & Email */}
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div>
+            <label htmlFor="name" className="mb-1.5 block text-xs sm:text-sm font-semibold text-foreground">
+              Nom complet
             </label>
             <input
-              id={k}
-              name={k}
-              type={k === "email" ? "email" : "text"}
-              autoComplete={k}
-              placeholder={k === "name" ? "Votre nom complet" : "votre.email@exemple.com"}
-              className={field}
-              aria-invalid={!!errors[k]}
-              aria-describedby={errors[k] ? `${k}-err` : undefined}
+              id="name"
+              name="name"
+              type="text"
+              autoComplete="name"
+              placeholder="Votre nom"
+              className={fieldBase}
+              aria-invalid={!!errors.name}
+              aria-describedby={errors.name ? "name-err" : undefined}
             />
-            {errors[k] && (
-              <p id={`${k}-err`} className="mt-1.5 text-xs font-medium text-destructive">
-                {errors[k]}
+            {errors.name && (
+              <p id="name-err" className="mt-1.5 text-xs font-medium text-destructive">
+                {errors.name}
               </p>
             )}
           </div>
-        ))}
 
+          <div>
+            <label htmlFor="email" className="mb-1.5 block text-xs sm:text-sm font-semibold text-foreground">
+              Adresse email
+            </label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              autoComplete="email"
+              placeholder="votre.email@exemple.com"
+              className={fieldBase}
+              aria-invalid={!!errors.email}
+              aria-describedby={errors.email ? "email-err" : undefined}
+            />
+            {errors.email && (
+              <p id="email-err" className="mt-1.5 text-xs font-medium text-destructive">
+                {errors.email}
+              </p>
+            )}
+          </div>
+        </div>
+
+        {/* Ligne 2 : Objet */}
         <div>
-          <label htmlFor="message" className="mb-2 block text-sm font-semibold text-foreground">
+          <label htmlFor="subject" className="mb-1.5 block text-xs sm:text-sm font-semibold text-foreground">
+            Objet
+          </label>
+          <input
+            id="subject"
+            name="subject"
+            type="text"
+            placeholder="Ex : Projet réseau, Création de site web, Audit..."
+            className={fieldBase}
+            aria-invalid={!!errors.subject}
+            aria-describedby={errors.subject ? "subject-err" : undefined}
+          />
+          {errors.subject && (
+            <p id="subject-err" className="mt-1.5 text-xs font-medium text-destructive">
+              {errors.subject}
+            </p>
+          )}
+        </div>
+
+        {/* Ligne 3 : Message */}
+        <div>
+          <label htmlFor="message" className="mb-1.5 block text-xs sm:text-sm font-semibold text-foreground">
             Message
           </label>
           <textarea
             id="message"
             name="message"
             rows={5}
-            placeholder="Décrivez votre projet, vos besoins ou vos questions..."
-            className={field}
+            placeholder="Décrivez votre besoin..."
+            className={fieldBase}
             aria-invalid={!!errors.message}
             aria-describedby={errors.message ? "message-err" : undefined}
           />
@@ -145,11 +193,12 @@ export function ContactForm() {
           )}
         </div>
 
+        {/* Bouton Soumettre */}
         <button
           type="submit"
           disabled={status === "sending"}
           aria-busy={status === "sending"}
-          className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary px-6 py-3.5 font-semibold text-primary-foreground transition-all hover:opacity-90 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 cursor-pointer"
+          className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-6 py-3.5 text-sm sm:text-base font-semibold text-primary-foreground shadow-sm transition-all hover:opacity-95 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 cursor-pointer"
         >
           {status === "sending" ? (
             <>
@@ -164,11 +213,12 @@ export function ContactForm() {
           )}
         </button>
 
+        {/* Alerte d'erreur de transmission */}
         <div aria-live="polite">
           {status === "failed" && (
             <div role="alert" className="space-y-3 rounded-2xl border border-destructive/40 bg-card p-4">
               <p className="text-sm font-semibold text-destructive">
-                {serverError || "Votre message n'a pas pu être envoyé. Réessayez ou écrivez-moi directement sur WhatsApp."}
+                {serverError || "Votre message n'a pas pu être envoyé. Vous pouvez réessayer ou m'écrire sur WhatsApp."}
               </p>
               <a href={profile.whatsapp} target="_blank" rel="noreferrer" className={errorBtn.whatsapp}>
                 Écrire sur WhatsApp
@@ -178,29 +228,30 @@ export function ContactForm() {
         </div>
       </form>
 
-      {/* Modal de confirmation propre & simple */}
+      {/* Modal de confirmation après envoi */}
       <Dialog open={confirmOpen} onOpenChange={setConfirmOpen}>
-        <DialogContent className="max-w-sm rounded-3xl border-border bg-card p-6 text-center shadow-xl">
-          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-500 ring-8 ring-emerald-500/5">
-            <CheckCircle2 size={32} className="stroke-[2.2]" />
+        <DialogContent className="max-w-md rounded-3xl border-border bg-card p-6 sm:p-8 text-center shadow-xl">
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-500 ring-8 ring-emerald-500/5">
+            <CheckCircle2 size={36} className="stroke-[2.2]" />
           </div>
 
           <DialogHeader className="mt-4 space-y-2 text-center sm:text-center">
-            <DialogTitle className="text-xl font-bold tracking-tight text-foreground text-center">
-              Message bien envoyé
+            <DialogTitle className="text-xl sm:text-2xl font-bold tracking-tight text-foreground text-center">
+              Message envoyé
             </DialogTitle>
             <DialogDescription className="text-sm text-muted-foreground leading-relaxed text-center">
               {sentInfo?.name ? (
                 <>
-                  Merci <strong className="text-foreground">{sentInfo.name}</strong> ! Votre message a bien été transmis. Je vous répondrai dans les plus brefs délais.
+                  Merci <strong className="text-foreground">{sentInfo.name}</strong> ! Votre message concernant{" "}
+                  <strong className="text-foreground">« {sentInfo.subject} »</strong> a bien été reçu. Je vous répondrai sous 24h.
                 </>
               ) : (
-                "Merci ! Votre message a bien été transmis. Je vous répondrai dans les plus brefs délais."
+                "Merci ! Votre message a bien été transmis. Je vous répondrai sous 24 heures."
               )}
             </DialogDescription>
           </DialogHeader>
 
-          <div className="mt-5 flex justify-center">
+          <div className="mt-6 flex justify-center">
             <Button
               type="button"
               onClick={() => setConfirmOpen(false)}

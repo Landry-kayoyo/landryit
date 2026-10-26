@@ -1,7 +1,7 @@
 import { createFileRoute, Link, Outlet, redirect, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { Award, Briefcase, Building2, FileText, FolderKanban, LayoutDashboard, LogOut, Menu, MessageSquare, UserCog } from "lucide-react";
+import { Award, Briefcase, Building2, Camera, FileText, FolderKanban, LayoutDashboard, LogOut, Menu, MessageSquare, UserCog } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { Toaster } from "@/components/ui/sonner";
@@ -29,6 +29,7 @@ const links = [
   { to: "/admin", label: "Tableau de bord", icon: LayoutDashboard, exact: true },
   { to: "/admin/messages", label: "Messages", icon: MessageSquare },
   { to: "/admin/projets", label: "Projets", icon: FolderKanban },
+  { to: "/admin/immersion", label: "Immersion terrain", icon: Camera },
   { to: "/admin/parcours", label: "Parcours", icon: Briefcase },
   { to: "/admin/certifications", label: "Certifications", icon: Award },
   { to: "/admin/organisations", label: "Organisations", icon: Building2 },

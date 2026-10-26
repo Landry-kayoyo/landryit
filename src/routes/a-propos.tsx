@@ -13,10 +13,11 @@ import { experiencesQuery } from "@/lib/content.queries";
 import { aboutPage, conviction, shareImage } from "@/content/portfolio";
 import { AnimatedStats } from "@/components/portfolio/AnimatedStats";
 import { BrandsMarquee } from "@/components/portfolio/BrandsMarquee";
+import { absoluteUrl } from "@/lib/siteConfig";
 
 const photo = { url: "/landry-a-propos.jpg" };
 
-const TITLE = "À propos — Landry Kayoyo | Administrateur réseaux & Développeur web";
+const TITLE = "À propos — Landry Kayoyo | Administrateur systèmes & réseaux | Développeur web";
 const DESC = "Parcours, vision et méthodes de Landry Kayoyo, administrateur systèmes et réseaux et développeur web à Lubumbashi : Université Don Bosco, INPP, CNSS et XSECURITY.";
 
 export const Route = createFileRoute("/a-propos")({
@@ -27,15 +28,18 @@ export const Route = createFileRoute("/a-propos")({
       { property: "og:title", content: TITLE },
       { property: "og:description", content: DESC },
       { property: "og:type", content: "profile" },
+      { property: "og:url", content: absoluteUrl("/a-propos") },
       { name: "twitter:card", content: "summary_large_image" },
       { property: "og:image", content: shareImage.url },
+      { property: "og:image:secure_url", content: shareImage.url },
+      { property: "og:image:type", content: "image/jpeg" },
       { property: "og:image:width", content: String(shareImage.width) },
       { property: "og:image:height", content: String(shareImage.height) },
       { property: "og:image:alt", content: shareImage.alt },
       { name: "twitter:image", content: shareImage.url },
       { name: "twitter:image:alt", content: shareImage.alt },
     ],
-    links: [{ rel: "canonical", href: "/a-propos" }],
+    links: [{ rel: "canonical", href: absoluteUrl("/a-propos") }],
   }),
   loader: ({ context }) => context.queryClient.prefetchQuery(experiencesQuery),
   component: APropos,

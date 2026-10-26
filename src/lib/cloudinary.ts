@@ -19,10 +19,11 @@ export async function uploadToCloudinary(
   resourceType: UploadResourceType = "image",
   onProgress?: (pct: number) => void,
 ): Promise<CloudinaryUploadResult> {
-  // 1. Récupérer la session Supabase pour le token JWT
+  // 1. Rafraîchir la session Supabase pour garantir un token valide
+  await supabase.auth.refreshSession();
   const { data: sessionData } = await supabase.auth.getSession();
   const token = sessionData.session?.access_token;
-  if (!token) throw new Error("Non authentifié.");
+  if (!token) throw new Error("Non authentifié. Veuillez vous reconnecter.");
 
   // 2. Demander une signature au serveur
   const signRes = await fetch("/api/cloudinary-sign", {

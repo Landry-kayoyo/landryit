@@ -58,3 +58,30 @@ export const brandsQuery = queryOptions({
   },
   staleTime: 60_000,
 });
+
+export const IMMERSION_KEY = "gallery_immersion";
+
+export interface PublicImmersionItem {
+  id: string;
+  title: string;
+  tag: string;
+  image_url: string;
+  image_alt?: string | null;
+  published: boolean;
+  sort_order: number;
+}
+
+/** Photos et réalisations de la section Immersion terrain gérées depuis l'admin. */
+export const immersionQuery = queryOptions({
+  queryKey: ["public", "immersion"],
+  queryFn: async (): Promise<PublicImmersionItem[]> => {
+    const { data } = await supabase.from("app_settings").select("value").eq("key", IMMERSION_KEY).maybeSingle();
+    if (data?.value && Array.isArray(data.value) && data.value.length > 0) {
+      return (data.value as PublicImmersionItem[])
+        .filter((item) => item.published !== false)
+        .sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0));
+    }
+    return [];
+  },
+  staleTime: 60_000,
+});

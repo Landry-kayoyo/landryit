@@ -1,9 +1,16 @@
+import { SITE_URL, absoluteUrl } from "@/lib/siteConfig";
+
 // Tout le contenu du site est ici : modifiez ce fichier pour mettre à jour les textes.
 const cv = { url: "/cv.pdf" };
 
-// Adresse publique du site : sert à l'image d'aperçu au partage (WhatsApp, LinkedIn, Facebook, X).
-export const siteUrl = "https://project-trailblazer-hub.lovable.app";
-export const shareImage = { url: `${siteUrl}/og-landry-net.jpg`, width: 1200, height: 630, alt: "Logo Landry Net" };
+// Adresse publique du site lue depuis la configuration centrale
+export const siteUrl = SITE_URL;
+export const shareImage = {
+  url: absoluteUrl("/og-landry-net.jpg"),
+  width: 1200,
+  height: 630,
+  alt: "Logo Landry Net",
+};
 
 // ─────────────────────────────────────────────────────────
 // WHATSAPP — c'est ici que vous changez votre numéro.

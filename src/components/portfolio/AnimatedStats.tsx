@@ -4,22 +4,39 @@ import { useQuery } from "@tanstack/react-query";
 import { certificationsQuery, experiencesQuery, projectsQuery } from "@/lib/content.queries";
 
 function AnimatedCounter({ end, duration = 1200 }: { end: number; duration?: number }) {
-  const [count, setCount] = useState(0);
+  // Valeur réelle affichée immédiatement par défaut (SSR, JS en chargement ou désactivé)
+  const [count, setCount] = useState(end);
   const ref = useRef<HTMLSpanElement>(null);
   const started = useRef(false);
 
   useEffect(() => {
-    if (started.current || end <= 0) {
-      if (end > 0) setCount(end);
+    // Si l'utilisateur désactive les animations ou si end <= 0, conserver la valeur finale
+    const prefersReducedMotion =
+      typeof window !== "undefined" &&
+      window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+
+    if (prefersReducedMotion || end <= 0) {
+      setCount(end);
       return;
     }
-    const node = ref.current;
-    if (!node) return;
 
+    if (started.current) {
+      setCount(end);
+      return;
+    }
+
+    const node = ref.current;
+    if (!node || typeof IntersectionObserver === "undefined") {
+      setCount(end);
+      return;
+    }
+
+    let animationFrameId: number;
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0]?.isIntersecting) {
+        if (entries[0]?.isIntersecting && !started.current) {
           started.current = true;
+          setCount(0);
           const startTime = performance.now();
           const step = (now: number) => {
             const elapsed = now - startTime;
@@ -28,10 +45,10 @@ function AnimatedCounter({ end, duration = 1200 }: { end: number; duration?: num
             const easeOut = 1 - (1 - progress) * (1 - progress);
             setCount(Math.round(easeOut * end));
             if (progress < 1) {
-              requestAnimationFrame(step);
+              animationFrameId = requestAnimationFrame(step);
             }
           };
-          requestAnimationFrame(step);
+          animationFrameId = requestAnimationFrame(step);
           observer.disconnect();
         }
       },
@@ -39,7 +56,10 @@ function AnimatedCounter({ end, duration = 1200 }: { end: number; duration?: num
     );
 
     observer.observe(node);
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+      if (animationFrameId) cancelAnimationFrame(animationFrameId);
+    };
   }, [end, duration]);
 
   return (
@@ -69,7 +89,7 @@ export function AnimatedStats({ className = "" }: { className?: string }) {
       icon: Award,
       count: certsCount,
       label: "Certifications",
-      desc: "Réseaux & systèmes validés",
+      desc: "Formations suivies",
     },
     {
       icon: Briefcase,

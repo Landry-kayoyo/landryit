@@ -1,3 +1,4 @@
+# Généré automatiquement à chaque compilation avec VITE_SITE_URL
 User-agent: Googlebot
 Allow: /
 
@@ -10,5 +11,18 @@ Allow: /
 User-agent: facebookexternalhit
 Allow: /
 
-User-agent: *
+User-agent: LinkedInBot
 Allow: /
+
+User-agent: WhatsApp
+Allow: /
+
+User-agent: *
+Disallow: /admin
+Disallow: /admin/
+Disallow: /admin_/
+Disallow: /connexion-requise
+Disallow: /acces-refuse
+Allow: /
+
+Sitemap: https://landryit.vercel.app/sitemap.xml

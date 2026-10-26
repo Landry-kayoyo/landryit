@@ -8,6 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import { ContentError, ContentLoading } from "@/components/portfolio/ContentState";
 import { projectsQuery } from "@/lib/content.queries";
 import { shareImage } from "@/content/portfolio";
+import { absoluteUrl } from "@/lib/siteConfig";
 
 const TITLE = "Tous les projets — Landry Kayoyo";
 const DESC = "Toutes les réalisations et études de cas de Landry Kayoyo : haute disponibilité, réseaux résilients, sécurité et plateformes web modernes.";
@@ -20,15 +21,18 @@ export const Route = createFileRoute("/projets/")({
       { property: "og:title", content: TITLE },
       { property: "og:description", content: DESC },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: absoluteUrl("/projets") },
       { name: "twitter:card", content: "summary_large_image" },
       { property: "og:image", content: shareImage.url },
+      { property: "og:image:secure_url", content: shareImage.url },
+      { property: "og:image:type", content: "image/jpeg" },
       { property: "og:image:width", content: String(shareImage.width) },
       { property: "og:image:height", content: String(shareImage.height) },
       { property: "og:image:alt", content: shareImage.alt },
       { name: "twitter:image", content: shareImage.url },
       { name: "twitter:image:alt", content: shareImage.alt },
     ],
-    links: [{ rel: "canonical", href: "/projets" }],
+    links: [{ rel: "canonical", href: absoluteUrl("/projets") }],
   }),
   loader: ({ context }) => context.queryClient.prefetchQuery(projectsQuery),
   component: ProjectsPage,

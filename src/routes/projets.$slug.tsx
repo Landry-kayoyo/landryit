@@ -9,6 +9,7 @@ import { ProjectBody, firstImage } from "@/components/portfolio/ProjectBody";
 import { parseBlocks } from "@/lib/blocks";
 import { projectQuery, projectsQuery } from "@/lib/content.queries";
 import { profile, projectPage as copy, shareImage } from "@/content/portfolio";
+import { absoluteUrl, getOptimizedOgImageUrl } from "@/lib/siteConfig";
 
 export const Route = createFileRoute("/projets/$slug")({
   loader: async ({ params, context }) => {
@@ -18,23 +19,41 @@ export const Route = createFileRoute("/projets/$slug")({
     return project;
   },
   head: ({ loaderData, params }) => {
-    const title = loaderData ? `${loaderData.title} — Landry Kayoyo` : "Projet introuvable — Landry Kayoyo";
-    const description = loaderData?.summary ?? copy.unavailableText;
+    const isFound = Boolean(loaderData);
+    const title = isFound ? `${loaderData.title} — Landry Kayoyo` : "Projet introuvable — Landry Kayoyo";
+    const description = (isFound && loaderData?.summary) ? loaderData.summary : copy.unavailableText;
+    const projectUrl = absoluteUrl(`/projets/${params.slug}`);
+
+    const ogImageUrl = isFound && loaderData?.image_url
+      ? getOptimizedOgImageUrl(loaderData.image_url)
+      : shareImage.url;
+
+    const ogImageAlt = isFound && loaderData?.image_url
+      ? (loaderData.image_alt || loaderData.title)
+      : "Logo Landry Net";
+
+    const ogImageType = ogImageUrl.toLowerCase().endsWith(".png") ? "image/png" : "image/jpeg";
+
     return {
       meta: [
-        { title }, { name: "description", content: description },
-        { property: "og:title", content: title }, { property: "og:description", content: description },
-        { property: "og:type", content: "article" }, { name: "twitter:card", content: "summary_large_image" },
-        { property: "og:image", content: shareImage.url },
-        { property: "og:image:width", content: String(shareImage.width) },
-        { property: "og:image:height", content: String(shareImage.height) },
-        { property: "og:image:alt", content: shareImage.alt },
-        { name: "twitter:image", content: shareImage.url },
-        { name: "twitter:image:alt", content: shareImage.alt },
-        { property: "og:url", content: `/projets/${params.slug}` },
-        ...(!loaderData ? [{ name: "robots", content: "noindex" }] : []),
+        { title },
+        { name: "description", content: description },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        { property: "og:type", content: isFound ? "article" : "website" },
+        { property: "og:url", content: projectUrl },
+        { name: "twitter:card", content: "summary_large_image" },
+        { property: "og:image", content: ogImageUrl },
+        { property: "og:image:secure_url", content: ogImageUrl },
+        { property: "og:image:type", content: ogImageType },
+        { property: "og:image:width", content: "1200" },
+        { property: "og:image:height", content: "630" },
+        { property: "og:image:alt", content: ogImageAlt },
+        { name: "twitter:image", content: ogImageUrl },
+        { name: "twitter:image:alt", content: ogImageAlt },
+        ...(!isFound ? [{ name: "robots", content: "noindex, nofollow" }] : []),
       ],
-      links: [{ rel: "canonical", href: `/projets/${params.slug}` }],
+      links: [{ rel: "canonical", href: projectUrl }],
     };
   },
   component: ProjectDetail,
